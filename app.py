@@ -21,6 +21,10 @@ root.configure(background='white')
 root.geometry("800x600")
 
 
+left = None
+right = None
+
+
 def confirm(entry_key, totpp, right, left):
     print(entry_key.get(), totpp)
     totp = pyotp.TOTP(totpp)
@@ -78,7 +82,11 @@ def click(entry_email, entry_password, entry_password_confirm, right, container_
 
 
 def register(root):
-
+    global left, right
+    if left:
+        left.pack_forget()
+    if right:
+        right.pack_forget()
     left = Frame(root, relief="solid")
 
     right = Frame(root, relief="solid")
@@ -122,5 +130,120 @@ def register(root):
     container.pack(expand=True, fill="both", padx=90, pady=15)
 
 
-register(root)
+def login_handler(entry_email, entry_password, right, container_right, container, left):
+    email = entry_email.get()
+    password = entry_password.get()
+    users = db.users
+    user = users.find_one({"email": email})
+    if not user:
+        print("nie ma takiego usera")
+        return
+        pass
+    if bcrypt.checkpw(password.encode("utf-8"), user['password']):
+        print("git")
+        label_key = Label(container, text="KEY:",
+                          font="helvetica 12", pady=10)
+        label_key.configure(background=COLOR)
+        label_key.pack()
+        entry_key = Entry(container, borderwidth=8, relief=FLAT)
+        entry_key.pack()
+        btn_key = Button(container, text='Submit',
+                         command=partial(confirm, entry_key, user['TOTP'], right, left), font="helvetica 12", padx=20, pady=5)
+        btn_key.pack(pady=15)
+    else:
+        print("NIE")
+        return
+    # todo
+
+
+def login(root):
+    global left, right
+    if left:
+        left.pack_forget()
+    if right:
+        right.pack_forget()
+    left = Frame(root, relief="solid")
+
+    right = Frame(root, relief="solid")
+    left.configure(background=COLOR)
+    container_right = Example(right)
+    container_right.pack(side="left", expand=True, fill="both")
+    container = Frame(left,  relief="solid")
+    container.configure(background=COLOR)
+    label1 = Label(
+        container, text="Login", font="helvetica 30")
+    label1.configure(background=COLOR)
+    label1.pack()
+
+
+#
+    label_email = Label(container, text="Email:",
+                        font="helvetica 12", pady=15)
+    entry_email = Entry(container, borderwidth=8, relief=FLAT)
+    label_email.configure(background=COLOR)
+    label_email.pack()
+    entry_email.pack()
+    label_password = Label(container, text="Password:",
+                           font="helvetica 12", pady=15)
+    entry_password = Entry(container, borderwidth=8, relief=FLAT, show="*")
+    label_password.configure(background=COLOR)
+    label_password.pack()
+    entry_password.pack()
+
+    login_button = Button(container, text='Login',
+                          command=partial(login_handler, entry_email, entry_password, right, container_right, container, left), font="helvetica 12", padx=20, pady=5)
+    login_button.pack(pady=15)
+#
+
+    left.pack(side="left", expand=True, fill="both")
+    right.pack(side="right", expand=True, fill="both")
+    container.pack(expand=True, fill="both", padx=90, pady=15)
+
+
+def welcome(root):
+    global left, right
+    if left:
+        left.pack_forget()
+    if right:
+        right.pack_forget()
+    left = Frame(root, relief="solid")
+
+    right = Frame(root, relief="solid")
+    left.configure(background=COLOR)
+    container_right = Example(right)
+    container_right.pack(side="left", expand=True, fill="both")
+    container = Frame(left,  relief="solid")
+    container.configure(background=COLOR)
+    label1 = Label(
+        container, text="Login", font="helvetica 30")
+    label1.configure(background=COLOR)
+    label1.pack()
+    login_button = Button(container, text='Login',
+                          command=partial(login, root), font="helvetica 12", padx=20, pady=5)
+    login_button.pack(pady=15)
+
+    label_register = Label(
+        container, text="Register", font="helvetica 30")
+    label_register.configure(background=COLOR)
+    label_register.pack()
+    register_button = Button(container, text='Register',
+                             command=partial(register, root), font="helvetica 12", padx=20, pady=5)
+    register_button.pack(pady=15)
+
+    left.pack(side="left", expand=True, fill="both")
+    right.pack(side="right", expand=True, fill="both")
+    container.pack(expand=True, fill="both", padx=90, pady=15)
+
+
+# create a toplevel menu
+menubar = Menu(root)
+menubar.add_command(label="Menu", command=partial(welcome, root))
+menubar.add_command(label="Quit!", command=root.quit)
+
+# display the menu
+root.config(menu=menubar)
+
+# login(root)
+# register(root)
+welcome(root)
 root.mainloop()
