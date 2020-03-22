@@ -10,8 +10,15 @@ import bcrypt
 from PIL import Image, ImageTk
 from my_frames import Example, ExampleQR
 COLOR = "#e1e8e8"
+DB_PASSWORD = ''
 
-client = MongoClient('localhost', 27017)
+with open("private.json") as private_config:
+    private = json.loads(private_config.read())
+    DB_PASSWORD = private['password']
+
+client = MongoClient(
+    f"mongodb+srv://test:{DB_PASSWORD}@cluster0-pncd0.mongodb.net/test?retryWrites=true&w=majority")
+
 db = client.get_database('pilot')
 
 
@@ -41,6 +48,10 @@ def click(entry_email, entry_password, entry_password_confirm, right, container_
     email = entry_email.get()
     password = entry_password.get()
     password2 = entry_password_confirm.get()
+    if len(email) < 7 or len(password) < 5:
+        print("length pass / email")
+        return
+        # todo
     print(password)
     if password == password2:
         users = db.users
