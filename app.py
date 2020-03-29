@@ -32,6 +32,7 @@ root = Tk()
 root.title("Home Polit")
 root.configure(background='white')
 root.geometry("800x600")
+root.resizable(False, False)
 
 
 left = None
@@ -40,7 +41,29 @@ LOGIN = False
 
 
 def display_for_room(root, name):
-    print(name)
+    global left, right
+    if left:
+        left.pack_forget()
+    if right:
+        right.pack_forget()
+    left = Frame(root, width=400, relief="solid")
+    left.propagate(0)
+    right = Frame(root, width=400, relief="solid")
+    right.propagate(0)
+    left.configure(background=COLOR)
+    container_right = Example(right)
+    container_right.pack(side="left", expand=True, fill="both")
+    container = Frame(left,  relief="solid")
+    container.configure(background=COLOR)
+    label1 = Label(
+        container, text=name, font="helvetica 30")
+
+    label1.configure(background=COLOR)
+    label1.pack()
+
+    left.pack(side="left", expand=True, fill="both")
+    right.pack(side="right", expand=True, fill="both")
+    container.pack(expand=True, fill="both", padx=90, pady=15)
     pass
 
 
@@ -50,9 +73,10 @@ def devices_screen(root):
         left.pack_forget()
     if right:
         right.pack_forget()
-    left = Frame(root, relief="solid")
-
-    right = Frame(root, relief="solid")
+    left = Frame(root, width=400, relief="solid")
+    left.propagate(0)
+    right = Frame(root, width=400, relief="solid")
+    right.propagate(0)
     left.configure(background=COLOR)
     container_right = Example(right)
     container_right.pack(side="left", expand=True, fill="both")
@@ -149,9 +173,10 @@ def register(root):
         left.pack_forget()
     if right:
         right.pack_forget()
-    left = Frame(root, relief="solid")
-
-    right = Frame(root, relief="solid")
+    left = Frame(root, width=400, relief="solid")
+    left.propagate(0)
+    right = Frame(root, width=400, relief="solid")
+    right.propagate(0)
     left.configure(background=COLOR)
     container_right = Example(right)
     container_right.pack(side="left", expand=True, fill="both")
@@ -185,6 +210,9 @@ def register(root):
     btn1 = Button(container, text='Register',
                   command=partial(click, entry_email, entry_password, entry_password_confirm, right, container_right, container, left), font="helvetica 12", padx=20, pady=5)
     btn1.pack(pady=15)
+    login_button = Button(container, text='Login',
+                          command=partial(login, root), font="helvetica 12", padx=20, pady=5)
+    login_button.pack(pady=15)
 
     ####
     left.pack(side="left", expand=True, fill="both")
@@ -224,9 +252,10 @@ def login(root):
         left.pack_forget()
     if right:
         right.pack_forget()
-    left = Frame(root, relief="solid")
-
-    right = Frame(root, relief="solid")
+    left = Frame(root, width=400, relief="solid")
+    left.propagate(0)
+    right = Frame(root, width=400, relief="solid")
+    right.propagate(0)
     left.configure(background=COLOR)
     container_right = Example(right)
     container_right.pack(side="left", expand=True, fill="both")
@@ -256,6 +285,9 @@ def login(root):
                           command=partial(login_handler, entry_email, entry_password, right, container_right, container, left), font="helvetica 12", padx=20, pady=5)
     login_button.pack(pady=15)
 #
+    register_button = Button(container, text='Register',
+                             command=partial(register, root), font="helvetica 12", padx=20, pady=5)
+    register_button.pack(pady=15)
 
     left.pack(side="left", expand=True, fill="both")
     right.pack(side="right", expand=True, fill="both")
@@ -268,9 +300,10 @@ def welcome(root):
         left.pack_forget()
     if right:
         right.pack_forget()
-    left = Frame(root, relief="solid")
-
-    right = Frame(root, relief="solid")
+    left = Frame(root, width=400, relief="solid")
+    left.propagate(0)
+    right = Frame(root, width=400, relief="solid")
+    right.propagate(0)
     left.configure(background=COLOR)
     container_right = Example(right)
     container_right.pack(side="left", expand=True, fill="both")
