@@ -20,6 +20,12 @@ client = MongoClient(
     f"mongodb+srv://test:{DB_PASSWORD}@cluster0-pncd0.mongodb.net/test?retryWrites=true&w=majority")
 
 db = client.get_database('pilot')
+rooms = []
+with open("pilot_config.json") as conf:
+    a = json.load(conf)
+    for x in a:
+        if 'name' in x:
+            rooms.append(x['name'])
 
 
 root = Tk()
@@ -30,17 +36,62 @@ root.geometry("800x600")
 
 left = None
 right = None
+LOGIN = False
+
+
+def display_for_room(root, name):
+    print(name)
+    pass
+
+
+def devices_screen(root):
+    global left, right
+    if left:
+        left.pack_forget()
+    if right:
+        right.pack_forget()
+    left = Frame(root, relief="solid")
+
+    right = Frame(root, relief="solid")
+    left.configure(background=COLOR)
+    container_right = Example(right)
+    container_right.pack(side="left", expand=True, fill="both")
+    container = Frame(left,  relief="solid")
+    container.configure(background=COLOR)
+    label1 = Label(
+        container, text="WITAJ", font="helvetica 30")
+
+    label1.configure(background=COLOR)
+    label1.pack()
+    label2 = Label(
+        container, text="Wybierz z menu pokoj!", font="helvetica 15")
+
+    label2.configure(background=COLOR)
+    label2.pack()
+    left.pack(side="left", expand=True, fill="both")
+    right.pack(side="right", expand=True, fill="both")
+    container.pack(expand=True, fill="both", padx=90, pady=15)
+    menubar = Menu(root)
+    for item in rooms:
+        menubar.add_command(label=item, command=partial(
+            display_for_room, root, item))
+
+    # display the menu
+    root.config(menu=menubar)
 
 
 def confirm(entry_key, totpp, right, left):
     print(entry_key.get(), totpp)
     totp = pyotp.TOTP(totpp)
-    if entry_key.get() == totp.now():
-        print("LOGIN!")
-        right.pack_forget()
-        left.pack_forget()
-        pass
-        # todo
+    # uncomment
+    LOGIN = True
+    devices_screen(root)
+    # if entry_key.get() == totp.now():
+    #     LOGIN = True
+    #     print("LOGIN!")
+    #     devices_screen(root)
+    #     pass
+    # todo
 
 
 def click(entry_email, entry_password, entry_password_confirm, right, container_right, container, left):
@@ -247,12 +298,12 @@ def welcome(root):
 
 
 # create a toplevel menu
-menubar = Menu(root)
-menubar.add_command(label="Menu", command=partial(welcome, root))
-menubar.add_command(label="Quit!", command=root.quit)
+# menubar = Menu(root)
+# menubar.add_command(label="Menu", command=partial(welcome, root))
+# menubar.add_command(label="Quit!", command=root.quit)
 
-# display the menu
-root.config(menu=menubar)
+# # display the menu
+# root.config(menu=menubar)
 
 # login(root)
 # register(root)

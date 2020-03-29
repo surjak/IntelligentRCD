@@ -1,3 +1,84 @@
-{
-    "mode": "on"
-}
+[
+  {
+    "name": "kitchen",
+    "devices": [
+      {
+        "device": "oven",
+        "options": {
+          "mode": "OFF",
+          "slider": true
+        }
+      },
+      {
+        "device": "frigde",
+        "options": {
+          "mode": "OFF",
+          "slider": true
+        }
+      },
+      {
+        "device": "light",
+        "options": {
+          "mode": "OFF",
+          "color": ["White", "Red", "Yellow"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "bath"
+  },
+  {
+    "name": "living_room"
+  },
+  {
+    "name": "room"
+  },
+  {
+    "name": "sleeping_room"
+  },
+  {
+    "name": "garage"
+  },
+  {
+    "name": "kitchen",
+    "devices": [
+      {
+        "device": "oven",
+        "options": {
+          "mode": "OFF",
+          "slider": true
+        }
+      },
+      {
+        "device": "frigde",
+        "options": {
+          "mode": "OFF",
+          "slider": true
+        }
+      },
+      {
+        "device": "light",
+        "options": {
+          "mode": "OFF",
+          "color": ["White", "Red", "Yellow"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "bath"
+  },
+  {
+    "name": "living_room"
+  },
+  {
+    "name": "room"
+  },
+  {
+    "name": "sleeping_room"
+  },
+  {
+    "name": "garage"
+  }
+]
