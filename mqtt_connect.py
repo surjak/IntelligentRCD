@@ -4,18 +4,17 @@ import threading
 import sys
 
 
-def on_message(client, userdata, message):
-    print("message received ", str(message.payload.decode("utf-8")))
-    print("message topic=", message.topic)
-    print("message qos=", message.qos)
-    print("message retain flag=", message.retain)
+# def on_message(client, userdata, message):
+#     print("message received ", str(message.payload.decode("utf-8")))
+#     print("message topic=", message.topic)
+#     print("message qos=", message.qos)
+#     print("message retain flag=", message.retain)
 
 
-
-def subscriber():
+def subscriber(func):
     print("creating new instance")
     client = mqtt.Client("P1", clean_session=False)  # create new instance
-    client.on_message = on_message  # attach function to callback
+    client.on_message = func  # attach function to callback
     print("connecting to broker")
     client.connect("localhost", 1883, 300)
     client.loop_start()  # start the loop
@@ -36,13 +35,13 @@ def subscriber():
     # client.loop_stop()  # stop the loop
 
 
-x = threading.Thread(target=subscriber)
+# x = threading.Thread(target=subscriber)
 
-# y = threading.Thread(target=publisher)
-try:
-    x.start()
-except Exception:  # Wiem wiem... ale to sa narazie testy XD
-    x.start()
+# # y = threading.Thread(target=publisher)
+# try:
+#     x.start()
+# except Exception:  # Wiem wiem... ale to sa narazie testy XD
+#     x.start()
 # time.sleep(2)
 # y.start()
 # time.sleep(2)

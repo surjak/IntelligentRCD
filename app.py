@@ -9,9 +9,14 @@ from pymongo import MongoClient
 import bcrypt
 from PIL import Image, ImageTk
 from my_frames import Example, ExampleQR
+import paho.mqtt.client as mqtt
+import threading
+import sys
+from mqtt_connect import subscriber
 # COLOR = "#e1e8e8"
 COLOR = "#f0f0f0"
 DB_PASSWORD = ''
+
 
 with open("private.json") as private_config:
     private = json.loads(private_config.read())
@@ -361,6 +366,26 @@ def welcome(root):
     right.pack(side="right", expand=True, fill="both")
     container.pack(expand=True, fill="both", padx=90, pady=15)
 
+
+def on_message(client, userdata, message):
+    print("message received ", str(message.payload.decode("utf-8")))
+    print("message topic=", message.topic)
+    print("message qos=", message.qos)
+    print("message retain flag=", message.retain)
+
+    label1 = Label(
+        CONTAINER, text="value watek", font="helvetica 15")
+
+    label1.configure(background=COLOR)
+    label1.pack()
+
+
+x = threading.Thread(target=subscriber, args=(on_message,))
+
+try:
+    x.start()
+except Exception:  # Wiem wiem... ale to sa narazie testy XD
+    x.start()
 
 # uncomment
 # welcome(root)
