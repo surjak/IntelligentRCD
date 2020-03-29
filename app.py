@@ -9,7 +9,8 @@ from pymongo import MongoClient
 import bcrypt
 from PIL import Image, ImageTk
 from my_frames import Example, ExampleQR
-COLOR = "#e1e8e8"
+# COLOR = "#e1e8e8"
+COLOR = "#f0f0f0"
 DB_PASSWORD = ''
 
 with open("private.json") as private_config:
@@ -18,12 +19,12 @@ with open("private.json") as private_config:
 
 client = MongoClient(
     f"mongodb+srv://test:{DB_PASSWORD}@cluster0-pncd0.mongodb.net/test?retryWrites=true&w=majority")
-
+PILOT_CONFIG = []
 db = client.get_database('pilot')
 rooms = []
 with open("pilot_config.json") as conf:
-    a = json.load(conf)
-    for x in a:
+    PILOT_CONFIG = json.load(conf)
+    for x in PILOT_CONFIG:
         if 'name' in x:
             rooms.append(x['name'])
 
@@ -39,9 +40,26 @@ left = None
 right = None
 LOGIN = False
 
+CONTAINER = None
 
-def display_for_room(root, name):
-    global left, right
+
+def onselect(evt):
+    children = CONTAINER.winfo_children()
+    for i in range(3, len(children)):
+        children[i].destroy()
+    w = evt.widget
+    index = int(w.curselection()[0])
+    value = w.get(index)
+    print(f'You selected item {index}: "{value}, "')
+    label1 = Label(
+        CONTAINER, text=value, font="helvetica 15")
+
+    label1.configure(background=COLOR)
+    label1.pack()
+
+
+def display_for_room(root, name, index):
+    global left, right, CONTAINER
     if left:
         left.pack_forget()
     if right:
@@ -56,14 +74,28 @@ def display_for_room(root, name):
     container = Frame(left,  relief="solid")
     container.configure(background=COLOR)
     label1 = Label(
-        container, text=name, font="helvetica 30")
+        container, text=name, font="helvetica 15")
 
     label1.configure(background=COLOR)
     label1.pack()
 
     left.pack(side="left", expand=True, fill="both")
     right.pack(side="right", expand=True, fill="both")
-    container.pack(expand=True, fill="both", padx=90, pady=15)
+    container.pack(expand=True, fill="both", pady=10)
+    if 'devices' in PILOT_CONFIG[index]:
+        lbl = Label(container, text="Select device:", font="helvetica 8")
+        height = len(PILOT_CONFIG[index]['devices'])
+        if height > 8:
+            height = 8
+        listbox = Listbox(container, width=56, height=height)
+        listbox.bind('<Double-Button-1>', onselect)
+        for i, d in enumerate(PILOT_CONFIG[index]['devices']):
+            listbox.insert(i, d['device'])
+        lbl.pack()
+        listbox.pack()
+
+    CONTAINER = container
+
     pass
 
 
@@ -96,9 +128,9 @@ def devices_screen(root):
     right.pack(side="right", expand=True, fill="both")
     container.pack(expand=True, fill="both", padx=90, pady=15)
     menubar = Menu(root)
-    for item in rooms:
+    for i, item in enumerate(rooms):
         menubar.add_command(label=item, command=partial(
-            display_for_room, root, item))
+            display_for_room, root, item, i))
 
     # display the menu
     root.config(menu=menubar)
@@ -210,14 +242,14 @@ def register(root):
     btn1 = Button(container, text='Register',
                   command=partial(click, entry_email, entry_password, entry_password_confirm, right, container_right, container, left), font="helvetica 12", padx=20, pady=5)
     btn1.pack(pady=15)
-    login_button = Button(container, text='Login',
-                          command=partial(login, root), font="helvetica 12", padx=20, pady=5)
-    login_button.pack(pady=15)
 
     ####
     left.pack(side="left", expand=True, fill="both")
     right.pack(side="right", expand=True, fill="both")
     container.pack(expand=True, fill="both", padx=90, pady=15)
+    login_button = Button(left, text='Login',
+                          command=partial(login, root), font="helvetica 12", padx=20, pady=5)
+    login_button.pack(pady=15)
 
 
 def login_handler(entry_email, entry_password, right, container_right, container, left):
@@ -285,13 +317,13 @@ def login(root):
                           command=partial(login_handler, entry_email, entry_password, right, container_right, container, left), font="helvetica 12", padx=20, pady=5)
     login_button.pack(pady=15)
 #
-    register_button = Button(container, text='Register',
-                             command=partial(register, root), font="helvetica 12", padx=20, pady=5)
-    register_button.pack(pady=15)
 
     left.pack(side="left", expand=True, fill="both")
     right.pack(side="right", expand=True, fill="both")
     container.pack(expand=True, fill="both", padx=90, pady=15)
+    register_button = Button(left, text='Register',
+                             command=partial(register, root), font="helvetica 12", padx=20, pady=5)
+    register_button.pack(pady=15)
 
 
 def welcome(root):
@@ -330,15 +362,7 @@ def welcome(root):
     container.pack(expand=True, fill="both", padx=90, pady=15)
 
 
-# create a toplevel menu
-# menubar = Menu(root)
-# menubar.add_command(label="Menu", command=partial(welcome, root))
-# menubar.add_command(label="Quit!", command=root.quit)
-
-# # display the menu
-# root.config(menu=menubar)
-
-# login(root)
-# register(root)
-welcome(root)
+# uncomment
+# welcome(root)
+devices_screen(root)
 root.mainloop()
