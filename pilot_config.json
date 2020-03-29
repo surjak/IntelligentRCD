@@ -6,14 +6,14 @@
         "device": "oven",
         "options": {
           "mode": "OFF",
-          "slider": true
+          "power": true
         }
       },
       {
         "device": "frigde",
         "options": {
           "mode": "OFF",
-          "slider": true
+          "power": true
         }
       },
       {
@@ -47,14 +47,14 @@
         "device": "oven",
         "options": {
           "mode": "OFF",
-          "slider": true
+          "power": true
         }
       },
       {
         "device": "frigde",
         "options": {
           "mode": "OFF",
-          "slider": true
+          "power": true
         }
       },
       {

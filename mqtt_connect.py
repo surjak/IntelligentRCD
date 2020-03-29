@@ -2,26 +2,43 @@ import paho.mqtt.client as mqtt
 import time
 import threading
 import sys
-
-
-# def on_message(client, userdata, message):
-#     print("message received ", str(message.payload.decode("utf-8")))
-#     print("message topic=", message.topic)
-#     print("message qos=", message.qos)
-#     print("message retain flag=", message.retain)
+import json
 
 
 def subscriber(func):
+    routes = []
+
+    with open("pilot_config.json") as conf:
+        a = json.load(conf)
+        for x in a:
+            if 'name' in x:
+                if 'devices' in x:
+                    for dev in x['devices']:
+                        if 'options' in dev:
+                            if 'mode' in dev['options']:
+                                routes.append(
+                                    f"{x['name']}/{dev['device']}/mode")
+                            if 'power' in dev['options']:
+                                routes.append(
+                                    f"{x['name']}/{dev['device']}/power")
+                            if 'color' in dev['options']:
+                                routes.append(
+                                    f"{x['name']}/{dev['device']}/color")
     print("creating new instance")
-    client = mqtt.Client("P1", clean_session=False)  # create new instance
-    client.on_message = func  # attach function to callback
+    client = mqtt.Client("P1", clean_session=False)
+    client.on_message = func
     print("connecting to broker")
     client.connect("localhost", 1883, 300)
-    client.loop_start()  # start the loop
-    print("Subscribing to topic", "house/bulbs/bulb1")
-    client.subscribe("house/bulbs/bulb1")
-    client.subscribe("house/bulbs/bulb2")
-    client.loop_forever()
+    client.loop_start()
+    print("Subscribing to routes")
+    for route in routes:
+        print(route)
+        client.subscribe(route)
+
+    try:
+        client.loop_forever()
+    except Exception:
+        client.loop_forever()
 
 
 # def publisher():

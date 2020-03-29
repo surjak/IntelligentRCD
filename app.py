@@ -46,6 +46,7 @@ right = None
 LOGIN = False
 
 CONTAINER = None
+INDEX = None
 
 
 def onselect(evt):
@@ -62,9 +63,30 @@ def onselect(evt):
     label1.configure(background=COLOR)
     label1.pack()
 
+    print(INDEX, "    ", index)
+
+    if 'mode' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
+        opt = Label(
+            CONTAINER, text="Mode", font="helvetica 10")
+
+        opt.configure(background=COLOR)
+        opt.pack()
+    if 'power' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
+        opt = Label(
+            CONTAINER, text="Power", font="helvetica 10")
+
+        opt.configure(background=COLOR)
+        opt.pack()
+    if 'color' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
+        opt = Label(
+            CONTAINER, text="Color", font="helvetica 10")
+
+        opt.configure(background=COLOR)
+        opt.pack()
+
 
 def display_for_room(root, name, index):
-    global left, right, CONTAINER
+    global left, right, CONTAINER, INDEX
     if left:
         left.pack_forget()
     if right:
@@ -100,6 +122,7 @@ def display_for_room(root, name, index):
         listbox.pack()
 
     CONTAINER = container
+    INDEX = index
 
     pass
 
