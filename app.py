@@ -454,9 +454,11 @@ x = threading.Thread(target=subscriber, args=(on_message,))
 
 try:
     x.start()
-except:  # Wiem wiem... ale to sa narazie testy XD
-    sys.exit()
+except:
+    print("Error in thread, starting thread again")
+    x.start()
+    # sys.exit()
     # uncomment
-welcome(root)
-# devices_screen(root)
+# welcome(root)
+devices_screen(root)
 root.mainloop()

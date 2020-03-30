@@ -42,4 +42,6 @@ def subscriber(func):
     try:
         client.loop_forever()
     except:
-        sys.exit()
+        print("Error in thread, starting subscriber again")
+        subscriber(func)
+        # sys.exit()
