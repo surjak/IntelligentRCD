@@ -71,11 +71,7 @@ def update_value(evt):
 
 
 def change_mode():
-    # if text == "OFF":
-    #     print(f'{ROOM}/{DEVICE}/mode             ON')
-    #     publisher.publish(f'{ROOM}/{DEVICE}/mode', "ON")
-    # else:
-    #     print(f'{ROOM}/{DEVICE}/mode             OFF')
+
     publisher.publish(f'{ROOM}/{DEVICE}/mode', btn_var.get())
 
     pass
@@ -480,11 +476,6 @@ def on_message(client, userdata, message):
                                 if 'color' in dev['options']:
                                     if data[2] == "color":
                                         pass
-    # if data[0] == ROOM:
-    #     children = CONTAINER.winfo_children()
-    #     for i in range(4, len(children)):
-    #         children[i].destroy()
-    #     display_for_room(root, data[0], i)
 
 
 x = threading.Thread(target=subscriber, args=(on_message,))
@@ -494,8 +485,6 @@ try:
 except:
     print("Error in thread, starting thread again")
     x.start()
-    # sys.exit()
-    # uncomment
-# welcome(root)
-devices_screen(root)
+
+welcome(root)
 root.mainloop()

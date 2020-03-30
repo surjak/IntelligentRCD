@@ -26,59 +26,151 @@
     ]
   },
   {
-    "name": "bath"
-  },
-  {
-    "name": "living_room"
-  },
-  {
-    "name": "room"
-  },
-  {
-    "name": "sleeping_room"
-  },
-  {
-    "name": "garage"
-  },
-  {
-    "name": "kitchen1",
+    "name": "bath",
     "devices": [
       {
-        "device": "oven",
+        "device": "light",
         "options": {
           "mode": "OFF",
+          "color": ["White", "Red", "Yellow"],
           "power": true
         }
       },
       {
-        "device": "frigde",
+        "device": "shower",
         "options": {
           "mode": "OFF",
           "power": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "living_room",
+    "devices": [
+      {
+        "device": "light",
+        "options": {
+          "mode": "OFF",
+          "color": ["White", "Red", "Yellow"],
+          "power": true
+        }
+      },
+      {
+        "device": "TV",
+        "options": {
+          "mode": "OFF",
+          "power": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "room",
+    "devices": [
+      {
+        "device": "door",
+        "options": {
+          "mode": "OFF"
+        }
+      },
+      {
+        "device": "window",
+        "options": {
+          "mode": "ON"
         }
       },
       {
         "device": "light",
         "options": {
           "mode": "OFF",
-          "color": ["White", "Red", "Yellow"]
+          "color": ["White", "Red", "Yellow"],
+          "power": true
+        }
+      },
+      {
+        "device": "TV",
+        "options": {
+          "mode": "OFF",
+          "power": true
         }
       }
     ]
   },
   {
-    "name": "bath"
+    "name": "sleeping_room",
+    "devices": [
+      {
+        "device": "door",
+        "options": {
+          "mode": "OFF"
+        }
+      },
+      {
+        "device": "window",
+        "options": {
+          "mode": "ON"
+        }
+      },
+      {
+        "device": "light",
+        "options": {
+          "mode": "OFF",
+          "color": ["White", "Red", "Yellow"],
+          "power": true
+        }
+      },
+      {
+        "device": "TV",
+        "options": {
+          "mode": "OFF",
+          "power": true
+        }
+      }
+    ]
   },
   {
-    "name": "living_room"
+    "name": "garage",
+    "devices": [
+      {
+        "device": "door",
+        "options": {
+          "mode": "OFF"
+        }
+      },
+      {
+        "device": "window",
+        "options": {
+          "mode": "ON"
+        }
+      },
+      {
+        "device": "light",
+        "options": {
+          "mode": "OFF",
+          "color": ["White", "Red", "Yellow"],
+          "power": true
+        }
+      }
+    ]
   },
   {
-    "name": "room"
-  },
-  {
-    "name": "sleeping_room"
-  },
-  {
-    "name": "garage"
+    "name": "laundry_room",
+    "devices": [
+      {
+        "device": "waching_machine",
+        "options": {
+          "mode": "OFF",
+          "power": true
+        }
+      },
+      {
+        "device": "iron",
+        "options": {
+          "mode": "OFF",
+          "power": true
+        }
+      }
+    ]
   }
 ]
