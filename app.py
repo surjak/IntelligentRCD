@@ -13,10 +13,12 @@ import paho.mqtt.client as mqtt
 import threading
 import sys
 from mqtt_connect import subscriber
+from publisher import Publisher
 # COLOR = "#e1e8e8"
 COLOR = "#f0f0f0"
 DB_PASSWORD = ''
 
+publisher = Publisher()
 
 with open("private.json") as private_config:
     private = json.loads(private_config.read())
@@ -48,39 +50,50 @@ LOGIN = False
 CONTAINER = None
 INDEX = None
 
+ROOM = None
+DEVICE = None
+
 
 def on_color_change(evt):
     w = evt.widget
     index = int(w.curselection()[0])
     value = w.get(index)
-    print(f'You selected item {index}: "{value}, "')
+    print(f'{ROOM}/{DEVICE}/color             {value}')
+    publisher.publish(f'{ROOM}/{DEVICE}/color', value)
 
 
 def update_value(evt):
     w = evt.widget
-    print(f'You selected item: "{w.get()}, "')
+    print(f'{ROOM}/{DEVICE}/power             {w.get()}')
+    publisher.publish(f'{ROOM}/{DEVICE}/power', w.get())
 
 
 def change_mode(text):
-    print("btn", text)
+    if text == "OFF":
+        print(f'{ROOM}/{DEVICE}/mode             ON')
+        publisher.publish(f'{ROOM}/{DEVICE}/mode', "ON")
+    else:
+        print(f'{ROOM}/{DEVICE}/mode             OFF')
+        publisher.publish(f'{ROOM}/{DEVICE}/mode', "OFF")
+
     pass
 
 
 def onselect(evt):
+    global DEVICE
     children = CONTAINER.winfo_children()
     for i in range(3, len(children)):
         children[i].destroy()
     w = evt.widget
     index = int(w.curselection()[0])
     value = w.get(index)
-    print(f'You selected item {index}: "{value}, "')
+
     label1 = Label(
         CONTAINER, text=value, font="helvetica 15")
 
     label1.configure(background=COLOR)
     label1.pack()
-
-    print(INDEX, "    ", index)
+    DEVICE = value
 
     if 'mode' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
         opt = Label(
@@ -119,7 +132,7 @@ def onselect(evt):
 
 
 def display_for_room(root, name, index):
-    global left, right, CONTAINER, INDEX
+    global left, right, CONTAINER, INDEX, ROOM
     if left:
         left.pack_forget()
     if right:
@@ -133,7 +146,6 @@ def display_for_room(root, name, index):
     container_right.pack(side="left", expand=True, fill="both")
     container = Frame(left,  relief="solid")
     container.configure(background=COLOR)
-    print(name)
     label1 = Label(
         container, text=name, font="helvetica 15")
 
@@ -157,6 +169,7 @@ def display_for_room(root, name, index):
 
     CONTAINER = container
     INDEX = index
+    ROOM = name
 
     pass
 
@@ -202,13 +215,13 @@ def confirm(entry_key, totpp, right, left):
     print(entry_key.get(), totpp)
     totp = pyotp.TOTP(totpp)
     # uncomment
-    LOGIN = True
-    devices_screen(root)
-    # if entry_key.get() == totp.now():
-    #     LOGIN = True
-    #     print("LOGIN!")
-    #     devices_screen(root)
-    #     pass
+    # LOGIN = True
+    # devices_screen(root)
+    if entry_key.get() == totp.now():
+        LOGIN = True
+        print("LOGIN!")
+        devices_screen(root)
+        pass
     # todo
 
 
@@ -267,10 +280,10 @@ def register(root):
         left.pack_forget()
     if right:
         right.pack_forget()
-    left = Frame(root, width=400, relief="solid")
-    left.propagate(0)
-    right = Frame(root, width=400, relief="solid")
-    right.propagate(0)
+    left = Frame(root, relief="solid")
+
+    right = Frame(root,  relief="solid")
+
     left.configure(background=COLOR)
     container_right = Example(right)
     container_right.pack(side="left", expand=True, fill="both")
@@ -437,14 +450,13 @@ def on_message(client, userdata, message):
     label1.pack()
 
 
-# x = threading.Thread(target=subscriber, args=(on_message,))
+x = threading.Thread(target=subscriber, args=(on_message,))
 
-# try:
-#     x.start()
-# except Exception:  # Wiem wiem... ale to sa narazie testy XD
-#     x.start()
-
-# uncomment
-# welcome(root)
-devices_screen(root)
+try:
+    x.start()
+except:  # Wiem wiem... ale to sa narazie testy XD
+    sys.exit()
+    # uncomment
+welcome(root)
+# devices_screen(root)
 root.mainloop()
