@@ -44,4 +44,3 @@ def subscriber(func):
     except:
         print("Error in thread, starting subscriber again")
         subscriber(func)
-        # sys.exit()

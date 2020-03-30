@@ -71,10 +71,7 @@ def update_value(evt):
 
 
 def change_mode():
-
     publisher.publish(f'{ROOM}/{DEVICE}/mode', btn_var.get())
-
-    pass
 
 
 def onselect(evt):
@@ -176,8 +173,6 @@ def display_for_room(root, name, index):
     INDEX = index
     ROOM = name
 
-    pass
-
 
 def devices_screen(root):
     global left, right
@@ -219,15 +214,10 @@ def devices_screen(root):
 def confirm(entry_key, totpp, right, left):
     print(entry_key.get(), totpp)
     totp = pyotp.TOTP(totpp)
-    # uncomment
-    # LOGIN = True
-    # devices_screen(root)
     if entry_key.get() == totp.now():
         LOGIN = True
         print("LOGIN!")
         devices_screen(root)
-        pass
-    # todo
 
 
 def click(entry_email, entry_password, entry_password_confirm, right, container_right, container, left):
@@ -276,7 +266,6 @@ def click(entry_email, entry_password, entry_password_confirm, right, container_
         btn_key.pack(pady=15)
     else:
         return
-        # todo
 
 
 def register(root):
@@ -340,9 +329,7 @@ def login_handler(entry_email, entry_password, right, container_right, container
     if not user:
         print("nie ma takiego usera")
         return
-        pass
     if bcrypt.checkpw(password.encode("utf-8"), user['password']):
-        print("git")
         label_key = Label(container, text="KEY:",
                           font="helvetica 12", pady=10)
         label_key.configure(background=COLOR)
@@ -355,7 +342,6 @@ def login_handler(entry_email, entry_password, right, container_right, container
     else:
         print("NIE")
         return
-    # todo
 
 
 def login(root):
@@ -446,10 +432,7 @@ def on_message(client, userdata, message):
     print("message received ", str(message.payload.decode("utf-8")))
     mess = str(message.payload.decode("utf-8"))
     print("message topic=", message.topic)
-    print("message qos=", message.qos)
-    print("message retain flag=", message.retain)
     data = message.topic.split('/')
-    print(data)
 
     for x in PILOT_CONFIG:
 
@@ -478,13 +461,17 @@ def on_message(client, userdata, message):
                                         pass
 
 
-x = threading.Thread(target=subscriber, args=(on_message,))
+def main():
+    x = threading.Thread(target=subscriber, args=(on_message,))
+    try:
+        x.start()
+    except:
+        print("Error in thread, starting thread again")
+        x.start()
 
-try:
-    x.start()
-except:
-    print("Error in thread, starting thread again")
-    x.start()
+    welcome(root)
+    root.mainloop()
 
-welcome(root)
-root.mainloop()
+
+if __name__ == "__main__":
+    main()
