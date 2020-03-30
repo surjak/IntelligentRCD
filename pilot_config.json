@@ -12,7 +12,7 @@
       {
         "device": "frigde",
         "options": {
-          "mode": "OFF",
+          "mode": "ON",
           "power": true
         }
       },

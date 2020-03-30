@@ -49,6 +49,23 @@ CONTAINER = None
 INDEX = None
 
 
+def on_color_change(evt):
+    w = evt.widget
+    index = int(w.curselection()[0])
+    value = w.get(index)
+    print(f'You selected item {index}: "{value}, "')
+
+
+def update_value(evt):
+    w = evt.widget
+    print(f'You selected item: "{w.get()}, "')
+
+
+def change_mode(text):
+    print("btn", text)
+    pass
+
+
 def onselect(evt):
     children = CONTAINER.winfo_children()
     for i in range(3, len(children)):
@@ -71,18 +88,34 @@ def onselect(evt):
 
         opt.configure(background=COLOR)
         opt.pack()
+        text = PILOT_CONFIG[INDEX]['devices'][index]['options']['mode']
+        btn = Button(CONTAINER, text=text, command=partial(change_mode, text))
+        btn.pack()
     if 'power' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
         opt = Label(
             CONTAINER, text="Power", font="helvetica 10")
 
         opt.configure(background=COLOR)
         opt.pack()
+        slider = Scale(CONTAINER, from_=0, to=100,
+                       tickinterval=10, orient=HORIZONTAL, length=300)
+        slider.set(0)
+        slider.bind("<ButtonRelease-1>", update_value)
+        slider.pack()
     if 'color' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
         opt = Label(
             CONTAINER, text="Color", font="helvetica 10")
 
         opt.configure(background=COLOR)
         opt.pack()
+        height = len(PILOT_CONFIG[INDEX]['devices'][index]['options']['color'])
+        if height > 8:
+            height = 8
+        listbox = Listbox(CONTAINER, width=56, height=height)
+        listbox.bind('<Double-Button-1>', on_color_change)
+        for i, d in enumerate(PILOT_CONFIG[INDEX]['devices'][index]['options']['color']):
+            listbox.insert(i, d)
+        listbox.pack()
 
 
 def display_for_room(root, name, index):
@@ -100,6 +133,7 @@ def display_for_room(root, name, index):
     container_right.pack(side="left", expand=True, fill="both")
     container = Frame(left,  relief="solid")
     container.configure(background=COLOR)
+    print(name)
     label1 = Label(
         container, text=name, font="helvetica 15")
 
@@ -403,12 +437,12 @@ def on_message(client, userdata, message):
     label1.pack()
 
 
-x = threading.Thread(target=subscriber, args=(on_message,))
+# x = threading.Thread(target=subscriber, args=(on_message,))
 
-try:
-    x.start()
-except Exception:  # Wiem wiem... ale to sa narazie testy XD
-    x.start()
+# try:
+#     x.start()
+# except Exception:  # Wiem wiem... ale to sa narazie testy XD
+#     x.start()
 
 # uncomment
 # welcome(root)
