@@ -53,6 +53,8 @@ INDEX = None
 ROOM = None
 DEVICE = None
 
+btn_var = StringVar()
+
 
 def on_color_change(evt):
     w = evt.widget
@@ -68,13 +70,13 @@ def update_value(evt):
     publisher.publish(f'{ROOM}/{DEVICE}/power', w.get())
 
 
-def change_mode(text):
-    if text == "OFF":
-        print(f'{ROOM}/{DEVICE}/mode             ON')
-        publisher.publish(f'{ROOM}/{DEVICE}/mode', "ON")
-    else:
-        print(f'{ROOM}/{DEVICE}/mode             OFF')
-        publisher.publish(f'{ROOM}/{DEVICE}/mode', "OFF")
+def change_mode():
+    # if text == "OFF":
+    #     print(f'{ROOM}/{DEVICE}/mode             ON')
+    #     publisher.publish(f'{ROOM}/{DEVICE}/mode', "ON")
+    # else:
+    #     print(f'{ROOM}/{DEVICE}/mode             OFF')
+    publisher.publish(f'{ROOM}/{DEVICE}/mode', btn_var.get())
 
     pass
 
@@ -102,7 +104,14 @@ def onselect(evt):
         opt.configure(background=COLOR)
         opt.pack()
         text = PILOT_CONFIG[INDEX]['devices'][index]['options']['mode']
-        btn = Button(CONTAINER, text=text, command=partial(change_mode, text))
+        if text == "OFF":
+            text = "ON"
+        else:
+            text = "OFF"
+        btn_var.set(text)
+        btn = Button(CONTAINER, textvariable=btn_var,
+                     command=partial(change_mode))
+
         btn.pack()
     if 'power' in PILOT_CONFIG[INDEX]['devices'][index]['options']:
         opt = Label(
@@ -439,15 +448,43 @@ def welcome(root):
 
 def on_message(client, userdata, message):
     print("message received ", str(message.payload.decode("utf-8")))
+    mess = str(message.payload.decode("utf-8"))
     print("message topic=", message.topic)
     print("message qos=", message.qos)
     print("message retain flag=", message.retain)
+    data = message.topic.split('/')
+    print(data)
 
-    label1 = Label(
-        CONTAINER, text="value watek", font="helvetica 15")
+    for x in PILOT_CONFIG:
 
-    label1.configure(background=COLOR)
-    label1.pack()
+        if 'name' in x:
+            if x['name'] == data[0]:
+                if 'devices' in x:
+                    for dev in x['devices']:
+                        if dev['device'] == data[1]:
+                            if 'options' in dev:
+                                if 'mode' in dev['options']:
+                                    if data[2] == 'mode':
+                                        print("JESTEM")
+                                        dev['options']['mode'] = mess
+                                        if data[0] == ROOM:
+                                            if mess == "OFF":
+                                                btn_var.set("ON")
+                                            else:
+                                                btn_var.set("OFF")
+
+                                if 'power' in dev['options']:
+                                    if data[2] == 'power':
+                                        pass
+
+                                if 'color' in dev['options']:
+                                    if data[2] == "color":
+                                        pass
+    # if data[0] == ROOM:
+    #     children = CONTAINER.winfo_children()
+    #     for i in range(4, len(children)):
+    #         children[i].destroy()
+    #     display_for_room(root, data[0], i)
 
 
 x = threading.Thread(target=subscriber, args=(on_message,))

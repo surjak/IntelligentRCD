@@ -41,7 +41,7 @@
     "name": "garage"
   },
   {
-    "name": "kitchen",
+    "name": "kitchen1",
     "devices": [
       {
         "device": "oven",
