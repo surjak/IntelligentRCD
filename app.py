@@ -37,7 +37,7 @@ with open("pilot_config.json") as conf:
 
 
 root = Tk()
-root.title("Home Polit")
+root.title("Home Pilot")
 root.configure(background='white')
 root.geometry("800x600")
 root.resizable(False, False)
