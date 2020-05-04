@@ -1,3 +1,5 @@
+from utils import on_closing
+import os
 from bson.binary import Binary
 from functools import partial
 from tkinter import *
@@ -470,6 +472,7 @@ def main():
         x.start()
 
     welcome(root)
+    root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
 
 
