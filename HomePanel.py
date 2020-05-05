@@ -46,4 +46,4 @@ class HomePanel(tk.Frame):
         self.controller.show_frame("LoginPanel")
 
     def register(self, root):
-        print("login")
+        self.controller.show_frame("RegisterPanel")

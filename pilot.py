@@ -1,6 +1,7 @@
 from tkinter import *
 from HomePanel import HomePanel
 from LoginPanel import LoginPanel
+from RegisterPanel import RegisterPanel
 
 
 class Pilot(Tk):
@@ -19,7 +20,7 @@ class Pilot(Tk):
 
         self.frames = {}
 
-        for page in (HomePanel, LoginPanel):
+        for page in (HomePanel, LoginPanel, RegisterPanel):
             page_name = page.__name__
             frame = page(self.container, self)
             self.frames[page_name] = frame
