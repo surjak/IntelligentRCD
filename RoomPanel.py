@@ -4,6 +4,8 @@ from my_frames import Example, ExampleQR
 from functools import partial
 import json
 from const import COLOR
+from publisher import Publisher
+publisher = Publisher()
 
 
 class RoomPanel(tk.Frame):
@@ -11,6 +13,8 @@ class RoomPanel(tk.Frame):
         self.index = index
         self.PILOT_CONFIG = PILOT_CONFIG
         self.btn_var = StringVar()
+        self.name = name
+        self.DEVICE = None
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.configure(bg=COLOR)
@@ -58,7 +62,7 @@ class RoomPanel(tk.Frame):
 
         label1.configure(background=COLOR)
         label1.pack()
-        DEVICE = value
+        self.DEVICE = value
 
         if 'mode' in self.PILOT_CONFIG[self.index]['devices'][index]['options']:
             opt = Label(
@@ -104,14 +108,15 @@ class RoomPanel(tk.Frame):
             listbox.pack()
 
     def change_mode(self):
-        print("Mode change")
+        publisher.publish(
+            f'{self.name}/{self.DEVICE}/mode', self.btn_var.get())
 
     def update_value(self, evt):
         w = evt.widget
-        print(f'/power             {w.get()}')
+        publisher.publish(f'{self.name}/{self.DEVICE}/power', w.get())
 
     def on_color_change(self, evt):
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
-        print(f'/color             {value}')
+        publisher.publish(f'{self.name}/{self.DEVICE}/color', value)
