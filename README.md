@@ -33,13 +33,13 @@ pip install -r requirements.txt
 ### Windows
 
 ```bash
-python app.py
+python pilot.py
 ```
 
 ### MacOS / Linux
 
 ```bash
-python3 app.py
+python3 pilot.py
 ```
 
 ## Photos
