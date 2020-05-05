@@ -7,6 +7,7 @@ from DevicesPanel import DevicesPanel
 from RoomPanel import RoomPanel
 import json
 from mqtt_connect import subscriber
+
 rooms = []
 PILOT_CONFIG = []
 with open("pilot_config.json") as conf:
@@ -38,8 +39,7 @@ class Pilot(Tk):
             self.frames[page_name] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
-        # self.show_frame("HomePanel")
-        self.display_devices_panel()
+        self.show_frame("HomePanel")
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
@@ -61,7 +61,7 @@ class Pilot(Tk):
 def on_message(client, userdata, message):
     print("message received ", str(message.payload.decode("utf-8")))
     mess = str(message.payload.decode("utf-8"))
-    print("message topic=", message.topic)
+    print("message topic ", message.topic)
     data = message.topic.split('/')
 
     for x in PILOT_CONFIG:
@@ -74,16 +74,7 @@ def on_message(client, userdata, message):
                             if 'options' in dev:
                                 if 'mode' in dev['options']:
                                     if data[2] == 'mode':
-                                        print("JESTEM")
                                         dev['options']['mode'] = mess
-                                        # if data[0] == ROOM:
-                                        #     if mess == "OFF":
-                                        #         # btn_var.set("ON")
-                                        #         print("TOdo on")
-                                        #     else:
-                                        #         # btn_var.set("OFF")
-                                        #         print("todo off")
-
                                 if 'power' in dev['options']:
                                     if data[2] == 'power':
                                         pass

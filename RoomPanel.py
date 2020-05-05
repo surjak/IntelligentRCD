@@ -110,6 +110,10 @@ class RoomPanel(tk.Frame):
     def change_mode(self):
         publisher.publish(
             f'{self.name}/{self.DEVICE}/mode', self.btn_var.get())
+        if self.btn_var.get() == "ON":
+            self.btn_var.set("OFF")
+        else:
+            self.btn_var.set("ON")
 
     def update_value(self, evt):
         w = evt.widget
