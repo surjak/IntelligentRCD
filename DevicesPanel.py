@@ -7,7 +7,7 @@ from const import COLOR
 
 
 class DevicesPanel(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, rooms):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.configure(bg=COLOR)
@@ -34,13 +34,7 @@ class DevicesPanel(tk.Frame):
         right.pack(side="right", expand=True, fill="both")
         container.pack(expand=True, fill="both", padx=90, pady=15)
         menubar = Menu(self)
-        rooms = []
 
-        with open("pilot_config.json") as conf:
-            PILOT_CONFIG = json.load(conf)
-            for x in PILOT_CONFIG:
-                if 'name' in x:
-                    rooms.append(x['name'])
         for i, item in enumerate(rooms):
             menubar.add_command(label=item, command=partial(
                 self.display_for_room, item, i))
@@ -49,4 +43,5 @@ class DevicesPanel(tk.Frame):
         self.controller.config(menu=menubar)
 
     def display_for_room(self, name, index):
-        print(name)
+        print(name, index)
+        self.controller.display_room_panel(name, index)
