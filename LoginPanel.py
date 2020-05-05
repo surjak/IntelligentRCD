@@ -94,4 +94,5 @@ class LoginPanel(tk.Frame):
         totp = pyotp.TOTP(totpp)
         if entry_key.get() == totp.now():
             LOGIN = True
-            print("LOGIN!")
+            print("login")
+            self.controller.display_devices_panel()

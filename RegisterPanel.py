@@ -131,3 +131,4 @@ class RegisterPanel(tk.Frame):
         if entry_key.get() == totp.now():
             LOGIN = True
             print("LOGIN!")
+            self.controller.display_devices_panel()

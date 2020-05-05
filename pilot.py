@@ -2,6 +2,7 @@ from tkinter import *
 from HomePanel import HomePanel
 from LoginPanel import LoginPanel
 from RegisterPanel import RegisterPanel
+from DevicesPanel import DevicesPanel
 
 
 class Pilot(Tk):
@@ -30,6 +31,12 @@ class Pilot(Tk):
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
+        frame.tkraise()
+
+    def display_devices_panel(self):
+        frame = DevicesPanel(self.container, self)
+        self.frames["DevicesPanel"] = frame
+        frame.grid(row=0, column=0, sticky="nsew")
         frame.tkraise()
 
 
