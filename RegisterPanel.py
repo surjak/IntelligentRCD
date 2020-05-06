@@ -83,17 +83,15 @@ class RegisterPanel(tk.Frame):
         password = entry_password.get()
         password2 = entry_password_confirm.get()
         if len(email) < 7 or len(password) < 5:
-            print("length pass / email")
+            print("Password - min 5 characters\nEmail - min 7 characters")
             return
-            # todo
-        print(password)
+        # print(password)
         if password == password2:
             users = db.users
             existing_user = users.find_one({"email": email})
             if existing_user:
-                print("already exists")
+                print("User already exists!")
                 return
-                # todo
             totp = pyotp.random_base32()
             a = pyotp.totp.TOTP(totp).provisioning_uri(
                 email, issuer_name="HOME_PILOT")
@@ -123,7 +121,7 @@ class RegisterPanel(tk.Frame):
                              command=partial(self.confirm, entry_key, TOTP), font="helvetica 12", padx=20, pady=5)
             btn_key.pack(pady=15)
         else:
-            return
+            print("Password have to match password2")
 
     def confirm(self, entry_key, totpp):
         print(entry_key.get(), totpp)
@@ -132,3 +130,5 @@ class RegisterPanel(tk.Frame):
             LOGIN = True
             print("LOGIN!")
             self.controller.display_devices_panel()
+        else:
+            print("Invalid key!")

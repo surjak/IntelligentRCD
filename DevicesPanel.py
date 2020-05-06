@@ -39,7 +39,7 @@ class DevicesPanel(tk.Frame):
             menubar.add_command(label=item, command=partial(
                 self.display_for_room, item, i))
 
-        # display the menu
+        # display menu
         self.controller.config(menu=menubar)
 
     def display_for_room(self, name, index):

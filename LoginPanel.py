@@ -73,7 +73,7 @@ class LoginPanel(tk.Frame):
         users = db.users
         user = users.find_one({"email": email})
         if not user:
-            print("nie ma takiego usera")
+            print("User doesn't exist, register!")
             return
         if bcrypt.checkpw(password.encode("utf-8"), user['password']):
             label_key = Label(self.container, text="KEY:",
@@ -86,7 +86,7 @@ class LoginPanel(tk.Frame):
                              command=partial(self.confirm, entry_key, user['TOTP']), font="helvetica 12", padx=20, pady=5)
             btn_key.pack(pady=15)
         else:
-            print("NIE")
+            print("Password is incorrent!")
             return
 
     def confirm(self, entry_key, totpp):
@@ -94,5 +94,7 @@ class LoginPanel(tk.Frame):
         totp = pyotp.TOTP(totpp)
         if entry_key.get() == totp.now():
             LOGIN = True
-            print("login")
+            print("You are in!")
             self.controller.display_devices_panel()
+        else:
+            print("Invalid key")
