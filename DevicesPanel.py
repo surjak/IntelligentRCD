@@ -38,6 +38,7 @@ class DevicesPanel(tk.Frame):
         for i, item in enumerate(rooms):
             menubar.add_command(label=item, command=partial(
                 self.display_for_room, item, i))
+        menubar.add_command(label="Logout", command=self.logout)
 
         # display menu
         self.controller.config(menu=menubar)
@@ -45,3 +46,8 @@ class DevicesPanel(tk.Frame):
     def display_for_room(self, name, index):
         print(name, index)
         self.controller.display_room_panel(name, index)
+
+    def logout(self):
+        emptyMenu = Menu(self)
+        self.controller.config(menu=emptyMenu)
+        self.controller.show_frame("HomePanel")

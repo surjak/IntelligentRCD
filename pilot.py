@@ -40,6 +40,7 @@ class Pilot(Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("HomePanel")
+        # self.display_devices_panel()
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
@@ -99,4 +100,7 @@ def on_closing():
 
 p = Pilot()
 p.protocol("WM_DELETE_WINDOW", on_closing)
-p.mainloop()
+try:
+    p.mainloop()
+except:
+    p.mainloop()
