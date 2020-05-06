@@ -6,7 +6,8 @@ import json
 
 
 def subscriber(func):
-    try:
+
+    def on_connect(client, userdata, flags, rc):
         routes = []
 
         with open("pilot_config.json") as conf:
@@ -25,20 +26,20 @@ def subscriber(func):
                                 if 'color' in dev['options']:
                                     routes.append(
                                         f"{x['name']}/{dev['device']}/color")
-        print("creating new instance")
-        client = mqtt.Client("P1", clean_session=False)
-        client.on_message = func
-        print("connecting to broker")
-        client.connect("localhost", 1883, 300)
-        try:
-            client.loop_start()
-        except:
-            sys.exit()
 
         print("Subscribing to routes")
         for route in routes:
             print(route)
             client.subscribe(route)
+
+    try:
+
+        print("creating new instance")
+        client = mqtt.Client("P1", clean_session=False)
+        client.on_message = func
+        client.on_connect = on_connect
+        print("connecting to broker")
+        client.connect("localhost", 1883, 300)
 
         try:
             client.loop_forever()
