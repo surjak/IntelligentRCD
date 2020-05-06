@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import bcrypt
 import pyotp
 from const import COLOR
+from tkinter import messagebox
 
 DB_PASSWORD = ''
 
@@ -74,6 +75,8 @@ class LoginPanel(tk.Frame):
         user = users.find_one({"email": email})
         if not user:
             print("User doesn't exist, register!")
+            messagebox.showinfo("Cannot find user!",
+                                "Register first!")
             return
         if bcrypt.checkpw(password.encode("utf-8"), user['password']):
             label_key = Label(self.container, text="KEY:",
@@ -87,6 +90,8 @@ class LoginPanel(tk.Frame):
             btn_key.pack(pady=15)
         else:
             print("Password is incorrent!")
+            messagebox.showinfo("Invalid password!",
+                                "Provide a correct password!")
             return
 
     def confirm(self, entry_key, totpp):
@@ -98,3 +103,5 @@ class LoginPanel(tk.Frame):
             self.controller.display_devices_panel()
         else:
             print("Invalid key")
+            messagebox.showinfo("Invalid key!",
+                                "Provide a valid key!")

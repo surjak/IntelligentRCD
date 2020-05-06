@@ -9,6 +9,8 @@ import pyotp
 from const import COLOR
 import qrcode
 from bson.binary import Binary
+from tkinter import messagebox
+from email_validator import validate_email, EmailNotValidError
 
 DB_PASSWORD = ''
 
@@ -80,12 +82,23 @@ class RegisterPanel(tk.Frame):
     def click(self, entry_email, entry_password, entry_password_confirm):
 
         email = entry_email.get()
+        try:
+            valid = validate_email(email)
+            email = valid.email
+        except EmailNotValidError as e:
+            print("Invalid email!")
+            messagebox.showinfo("PaInvalid email!",
+                                "Please provide a valid email!")
+            return
+
         password = entry_password.get()
         password2 = entry_password_confirm.get()
         if len(email) < 7 or len(password) < 5:
             print("Password - min 5 characters\nEmail - min 7 characters")
+            messagebox.showinfo("Password or email is incorrect!",
+                                "Password - min 5 characters\nEmail - min 7 characters!")
             return
-        # print(password)
+
         if password == password2:
             users = db.users
             existing_user = users.find_one({"email": email})
@@ -121,14 +134,18 @@ class RegisterPanel(tk.Frame):
                              command=partial(self.confirm, entry_key, TOTP), font="helvetica 12", padx=20, pady=5)
             btn_key.pack(pady=15)
         else:
-            print("Password have to match password2")
+            print("Passwords don't match")
+            messagebox.showinfo("Password error!",
+                                "Passwords don't match!")
 
     def confirm(self, entry_key, totpp):
         print(entry_key.get(), totpp)
         totp = pyotp.TOTP(totpp)
         if entry_key.get() == totp.now():
             LOGIN = True
-            print("LOGIN!")
+            print("You are in!")
             self.controller.display_devices_panel()
         else:
             print("Invalid key!")
+            messagebox.showinfo("Invalid key!",
+                                "Provide a valid key!")
