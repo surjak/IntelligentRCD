@@ -94,7 +94,7 @@ Prezentuję przykładowy plik konfiguracyjny
 - każde jedno pomieszczenie składa się z `name` oraz `devices` które jest tablicą
 - devices zawira obiekty które są urządzeniami
 - każde urządzenia ma pewne opcje - mode - stan urządzenia (włącznik/wyłącznik) - power - slider odpowiadający za natężenie/moc - color - tablica możliwych kolorów
-  Poniżej jest przykłądowy wygląd pliku konfiguracyjnego, cały plik jest ![tutaj](https://github.com/surjak/IntelligentRCD/blob/master/pilot_config.json)
+  Poniżej jest przykłądowy wygląd pliku konfiguracyjnego, cały plik jest [tutaj](https://github.com/surjak/IntelligentRCD/blob/master/pilot_config.json)
 
 Są to wszystkie dostępne opcje, w parametrze `mode` ustawiamy stan początkowy - "ON" lub "OFF"
 
