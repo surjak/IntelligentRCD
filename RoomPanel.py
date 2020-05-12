@@ -5,11 +5,14 @@ from functools import partial
 import json
 from const import COLOR
 from publisher import Publisher
+from threading import Thread
+
 publisher = Publisher()
 
 
 class RoomPanel(tk.Frame):
-    def __init__(self, parent, controller, name, PILOT_CONFIG, index):
+    def __init__(self, parent, controller, name, PILOT_CONFIG, index, PILOT):
+        self.PILOT = PILOT
         self.index = index
         self.PILOT_CONFIG = PILOT_CONFIG
         self.btn_var = StringVar()
@@ -56,7 +59,7 @@ class RoomPanel(tk.Frame):
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
-
+        self.PILOT.device = value
         label1 = Label(
             self.container, text=value, font="helvetica 15")
 
@@ -110,10 +113,7 @@ class RoomPanel(tk.Frame):
     def change_mode(self):
         publisher.publish(
             f'{self.name}/{self.DEVICE}/mode', self.btn_var.get())
-        if self.btn_var.get() == "ON":
-            self.btn_var.set("OFF")
-        else:
-            self.btn_var.set("ON")
+        self.change(self.btn_var.get())
 
     def update_value(self, evt):
         w = evt.widget
@@ -124,3 +124,9 @@ class RoomPanel(tk.Frame):
         index = int(w.curselection()[0])
         value = w.get(index)
         publisher.publish(f'{self.name}/{self.DEVICE}/color', value)
+
+    def change(self, mess):
+        if mess == "ON":
+            self.btn_var.set("OFF")
+        elif mess == "OFF":
+            self.btn_var.set("ON")

@@ -104,6 +104,8 @@ class RegisterPanel(tk.Frame):
             existing_user = users.find_one({"email": email})
             if existing_user:
                 print("User already exists!")
+                messagebox.showinfo("User already exists!",
+                                    "User already exists!")
                 return
             totp = pyotp.random_base32()
             a = pyotp.totp.TOTP(totp).provisioning_uri(

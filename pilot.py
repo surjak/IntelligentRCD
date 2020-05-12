@@ -18,9 +18,12 @@ with open("pilot_config.json") as conf:
 
 
 class Pilot(Tk):
+    room = None
+    device = None
+    ROOM = None
+
     def __init__(self):
         Tk.__init__(self)
-
         self.title("Home Pilot")
         self.configure(background='white')
         self.geometry("800x600")
@@ -53,44 +56,41 @@ class Pilot(Tk):
         frame.tkraise()
 
     def display_room_panel(self, name, index):
-        frame = RoomPanel(self.container, self, name, PILOT_CONFIG, index)
+        frame = RoomPanel(self.container, self, name,
+                          PILOT_CONFIG, index, Pilot)
         self.frames["RoomPanel"] = frame
         frame.grid(row=0, column=0, sticky="nsew")
         frame.tkraise()
+        Pilot.room = name
+        Pilot.ROOM = frame
 
+    @staticmethod
+    def on_message(client, userdata, message):
+        mess = str(message.payload.decode("utf-8"))
+        print("SUBSCRIBER --> ", message.topic,
+              str(message.payload.decode("utf-8")))
+        print("\n")
+        data = message.topic.split('/')
+        for x in PILOT_CONFIG:
 
-def on_message(client, userdata, message):
-    print("message received ", str(message.payload.decode("utf-8")))
-    mess = str(message.payload.decode("utf-8"))
-    print("message topic ", message.topic)
-    data = message.topic.split('/')
+            if 'name' in x:
+                if x['name'] == data[0]:
+                    if 'devices' in x:
+                        for dev in x['devices']:
+                            if dev['device'] == data[1]:
+                                if 'options' in dev:
+                                    if 'mode' in dev['options']:
+                                        if data[2] == 'mode':
+                                            dev['options']['mode'] = mess
+                                            if Pilot.room == data[0] and Pilot.device == data[1]:
+                                                Pilot.ROOM.change(mess)
+                                    if 'power' in dev['options']:
+                                        if data[2] == 'power':
+                                            pass
 
-    for x in PILOT_CONFIG:
-
-        if 'name' in x:
-            if x['name'] == data[0]:
-                if 'devices' in x:
-                    for dev in x['devices']:
-                        if dev['device'] == data[1]:
-                            if 'options' in dev:
-                                if 'mode' in dev['options']:
-                                    if data[2] == 'mode':
-                                        dev['options']['mode'] = mess
-                                if 'power' in dev['options']:
-                                    if data[2] == 'power':
-                                        pass
-
-                                if 'color' in dev['options']:
-                                    if data[2] == "color":
-                                        pass
-
-
-x = threading.Thread(target=subscriber, args=(on_message,))
-try:
-    x.start()
-except:
-    print("Error in thread, starting thread again")
-    x.start()
+                                    if 'color' in dev['options']:
+                                        if data[2] == "color":
+                                            pass
 
 
 def on_closing():
@@ -99,6 +99,14 @@ def on_closing():
 
 
 p = Pilot()
+
+x = threading.Thread(target=subscriber, args=(p.on_message,))
+try:
+    x.start()
+except:
+    print("Error in thread, starting thread again")
+    x.start()
+
 p.protocol("WM_DELETE_WINDOW", on_closing)
 try:
     p.mainloop()
