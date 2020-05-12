@@ -68,10 +68,10 @@ hasło: ala123
 
 # Uwagi
 
-Aplikacja nasłuchuje na zdarzenia wysyłane z urzadzeń, ich stan jest na bieżąco aktualizowany, poniżej prezentuję przykląd który warto wynokać w celu obserwacjio działania nasłuchiwania
+Aplikacja nasłuchuje na zdarzenia wysyłane z urzadzeń, ich stan jest na bieżąco aktualizowany, poniżej prezentuję przykład który warto wynokać w celu obserwacji działania nasłuchiwania
 
-- Wchodzimy w jakas zakładkę np. `room`
-- Otwieramy terminal i nawigujemy do folderu w którym jest mosquitto (chyba że zadziała bez tego)
+- Wchodzimy w jakąś zakładkę np. `room`
+- Otwieramy terminal i nawigujemy do folderu w którym jest mosquitto (chyba że zadziała bez nawigacji do tego folderu)
 - Wpisujemy komendę:
 
 ```bash
@@ -93,8 +93,11 @@ Prezentuję przykładowy plik konfiguracyjny
 
 - każde jedno pomieszczenie składa się z `name` oraz `devices` które jest tablicą
 - devices zawira obiekty które są urządzeniami
-- każde urządzenia ma pewne opcje - mode - stan urządzenia (włącznik/wyłącznik) - power - slider odpowiadający za natężenie/moc - color - tablica możliwych kolorów
-  Poniżej jest przykłądowy wygląd pliku konfiguracyjnego, cały plik jest [tutaj](https://github.com/surjak/IntelligentRCD/blob/master/pilot_config.json)
+- każde urządzenia ma pewne opcje 
+  - mode - stan urządzenia (włącznik/wyłącznik) 
+  - power - slider odpowiadający za natężenie/moc 
+  - color - tablica możliwych kolorów
+  Poniżej jest przykładowy wygląd pliku konfiguracyjnego, cały plik jest [tutaj](https://github.com/surjak/IntelligentRCD/blob/master/pilot_config.json)
 
 Są to wszystkie dostępne opcje, w parametrze `mode` ustawiamy stan początkowy - "ON" lub "OFF"
 
@@ -151,7 +154,7 @@ Są to wszystkie dostępne opcje, w parametrze `mode` ustawiamy stan początkowy
 
 ## Informacje
 
-- Aplikacja działa w oparciu o Mosquitto mqtt broker
-- Aplikacja w celu authentykacji użytkowników korzysta z bazy danych mongoDB, a dokładnie z mongoDB Atlas (żeby nie trzeba było ściągać)
+- Aplikacja działa w oparciu o Mosquitto MQTT broker
+- Aplikacja w celu authentykacji użytkowników korzysta z bazy danych MongoDB, a dokładnie z MongoDB Atlas (żeby nie trzeba było ściągać)
 - Należy pobrać aplikację FreeOTP - jest dostępna zarówno na Androida jak i na IOS
 - Hasło użytkownika jest hashowane za pomocą bcrypt
