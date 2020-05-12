@@ -154,3 +154,4 @@ Są to wszystkie dostępne opcje, w parametrze `mode` ustawiamy stan początkowy
 - Aplikacja działa w oparciu o Mosquitto mqtt broker
 - Aplikacja w celu authentykacji użytkowników korzysta z bazy danych mongoDB, a dokładnie z mongoDB Atlas (żeby nie trzeba było ściągać)
 - Należy pobrać aplikację FreeOTP - jest dostępna zarówno na Androida jak i na IOS
+- Hasło użytkownika jest hashowane za pomocą bcrypt

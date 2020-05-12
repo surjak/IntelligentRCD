@@ -1,3 +1,4 @@
+# Wyświetlenie wszystkich QR kodów z bazy, nie jest to używane w projekcie ale ktoś mógłby zapomnieć zaskanować kod i wtedy tym programem można taki kod wyjąć z bazy
 from io import BytesIO
 from pymongo import MongoClient
 from PIL import Image, ImageTk

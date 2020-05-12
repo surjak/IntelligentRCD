@@ -2,6 +2,10 @@ import paho.mqtt.client as mqtt
 
 
 class Publisher:
+    """
+        Publikowanie zdarzeń do brokera
+    """
+
     def __init__(self):
         self.client = mqtt.Client("P2")
         self.client.connect("localhost", 1883, 60)

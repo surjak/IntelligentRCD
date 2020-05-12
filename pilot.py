@@ -18,8 +18,11 @@ with open("pilot_config.json") as conf:
 
 
 class Pilot(Tk):
+    # nazwa obecnego pokoju
     room = None
+    # obecne urządznie
     device = None
+    # Obiekt obecnego pokoju
     ROOM = None
 
     def __init__(self):
@@ -43,19 +46,27 @@ class Pilot(Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("HomePanel")
-        # self.display_devices_panel()
 
     def show_frame(self, page_name):
+        """
+        Pokazywanie innego ekranu
+        """
         frame = self.frames[page_name]
         frame.tkraise()
 
     def display_devices_panel(self):
+        """
+        Wyświetlenie panelu urządzeń
+        """
         frame = DevicesPanel(self.container, self, rooms)
         self.frames["DevicesPanel"] = frame
         frame.grid(row=0, column=0, sticky="nsew")
         frame.tkraise()
 
     def display_room_panel(self, name, index):
+        """
+        Wyświetlenie pomieszczenia
+        """
         frame = RoomPanel(self.container, self, name,
                           PILOT_CONFIG, index, Pilot)
         self.frames["RoomPanel"] = frame
@@ -66,6 +77,9 @@ class Pilot(Tk):
 
     @staticmethod
     def on_message(client, userdata, message):
+        """
+        Metoda wykonująca się gdy przyjdzie wiadomość od brokera MQTT
+        """
         mess = str(message.payload.decode("utf-8"))
         print("SUBSCRIBER --> ", message.topic,
               str(message.payload.decode("utf-8")))
@@ -83,24 +97,22 @@ class Pilot(Tk):
                                         if data[2] == 'mode':
                                             dev['options']['mode'] = mess
                                             if Pilot.room == data[0] and Pilot.device == data[1]:
+                                                # poinformowanie pokoju o tym że chcemy zmienić jego stan
                                                 Pilot.ROOM.change(mess)
-                                    if 'power' in dev['options']:
-                                        if data[2] == 'power':
-                                            pass
-
-                                    if 'color' in dev['options']:
-                                        if data[2] == "color":
-                                            pass
 
 
 def on_closing():
+    """
+    Zakończenie aplikacji
+    """
     import os
     os.kill(os.getpid(), 9)
 
 
 p = Pilot()
-
+# Wątek od nasłuchiwania na informacje od Brokera MQTT
 x = threading.Thread(target=subscriber, args=(p.on_message,))
+# Czasem wątek napotyka problem z wystartowaniem
 try:
     x.start()
 except:

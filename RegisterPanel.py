@@ -25,6 +25,10 @@ db = client.get_database('pilot')
 
 
 class RegisterPanel(tk.Frame):
+    """
+        Panel rejestracji
+    """
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -42,7 +46,7 @@ class RegisterPanel(tk.Frame):
             self.container, text="Register", font="helvetica 30")
         label1.configure(background=COLOR)
         label1.pack()
-        ####
+
         label_email = Label(self.container, text="Email:",
                             font="helvetica 12", pady=15)
         entry_email = Entry(self.container, borderwidth=8, relief=FLAT)
@@ -68,7 +72,6 @@ class RegisterPanel(tk.Frame):
                       command=partial(self.click, entry_email, entry_password, entry_password_confirm), font="helvetica 12", padx=20, pady=5)
         btn1.pack(pady=15)
 
-        ####
         self.left.pack(side="left", expand=True, fill="both")
         self.right.pack(side="right", expand=True, fill="both")
         self.container.pack(expand=True, fill="both", padx=90, pady=15)
@@ -77,10 +80,15 @@ class RegisterPanel(tk.Frame):
         login_button.pack(pady=15)
 
     def navigate_to_menu(self):
+        """
+        Nawigacja do menu
+        """
         self.controller.show_frame("HomePanel")
 
     def click(self, entry_email, entry_password, entry_password_confirm):
-
+        """
+        Obsługiwanie rejestracji
+        """
         email = entry_email.get()
         try:
             valid = validate_email(email)
@@ -120,11 +128,9 @@ class RegisterPanel(tk.Frame):
                     "TOTP": totp,
                     "img": Binary(data)}
             users.insert_one(user)
-            # self.right.pack_forget()
             self.container_right.pack_forget()
             self.container_right = ExampleQR(self.right)
             self.container_right.pack(side="left", expand=True, fill="both")
-            # self.right.pack()
 
             label_key = Label(self.container, text="KEY:",
                               font="helvetica 12", pady=10)
@@ -141,6 +147,9 @@ class RegisterPanel(tk.Frame):
                                 "Passwords don't match!")
 
     def confirm(self, entry_key, totpp):
+        """
+        Obsługiwanie dwuetapowej autentykacji
+        """
         print(entry_key.get(), totpp)
         totp = pyotp.TOTP(totpp)
         if entry_key.get() == totp.now():

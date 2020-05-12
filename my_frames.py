@@ -3,6 +3,10 @@ from PIL import Image, ImageTk
 
 
 class Example(Frame):
+    """
+       Obrazek po prawej stronie
+    """
+
     def __init__(self, master, *pargs):
         Frame.__init__(self, master, *pargs)
 
@@ -27,6 +31,10 @@ class Example(Frame):
 
 
 class ExampleQR(Frame):
+    """
+        Wyświetlenie kodu QR
+    """
+
     def __init__(self, master, *pargs):
         Frame.__init__(self, master, *pargs)
 

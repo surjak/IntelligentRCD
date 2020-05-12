@@ -7,6 +7,9 @@ from const import COLOR
 
 
 class HomePanel(tk.Frame):
+    """
+        Panel główny wyświetlany zaraz po starcie aplikacji
+    """
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -43,7 +46,13 @@ class HomePanel(tk.Frame):
         container.pack(expand=True, fill="both", padx=90, pady=15)
 
     def login(self, root):
+        """
+        Nawigacja do logowania
+        """
         self.controller.show_frame("LoginPanel")
 
     def register(self, root):
+        """
+        Nawigacja do rejestracji
+        """
         self.controller.show_frame("RegisterPanel")

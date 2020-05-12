@@ -5,6 +5,8 @@ from functools import partial
 import json
 from const import COLOR
 
+# Panel urządzeń, ładuje manu z wyborem pomieszczenia
+
 
 class DevicesPanel(tk.Frame):
     def __init__(self, parent, controller, rooms):
@@ -34,7 +36,7 @@ class DevicesPanel(tk.Frame):
         right.pack(side="right", expand=True, fill="both")
         container.pack(expand=True, fill="both", padx=90, pady=15)
         menubar = Menu(self)
-
+        # dodanie opcji do menu
         for i, item in enumerate(rooms):
             menubar.add_command(label=item, command=partial(
                 self.display_for_room, item, i))
@@ -44,10 +46,16 @@ class DevicesPanel(tk.Frame):
         self.controller.config(menu=menubar)
 
     def display_for_room(self, name, index):
+        """
+        Nawigowanie do innego pokoju
+        """
         print(name, index)
         self.controller.display_room_panel(name, index)
 
     def logout(self):
+        """
+        Wylogowanie
+        """
         emptyMenu = Menu(self)
         self.controller.config(menu=emptyMenu)
         self.controller.show_frame("HomePanel")

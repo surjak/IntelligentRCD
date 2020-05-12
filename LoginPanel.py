@@ -66,9 +66,15 @@ class LoginPanel(tk.Frame):
         register_button.pack(pady=15)
 
     def navigate_to_menu(self):
+        """
+        Nawigacja do menu
+        """
         self.controller.show_frame("HomePanel")
 
     def login_handler(self, entry_email, entry_password):
+        """
+        Obsługiwanie logowania
+        """
         email = entry_email.get()
         password = entry_password.get()
         users = db.users
@@ -95,6 +101,9 @@ class LoginPanel(tk.Frame):
             return
 
     def confirm(self, entry_key, totpp):
+        """
+        Obsługiwanie dwuetapowej autentykacji
+        """
         print(entry_key.get(), totpp)
         totp = pyotp.TOTP(totpp)
         if entry_key.get() == totp.now():

@@ -11,6 +11,10 @@ publisher = Publisher()
 
 
 class RoomPanel(tk.Frame):
+    """
+        Panel pokoju - wyświetlenie odpowiedniego pomieszczenia
+    """
+
     def __init__(self, parent, controller, name, PILOT_CONFIG, index, PILOT):
         self.PILOT = PILOT
         self.index = index
@@ -53,6 +57,9 @@ class RoomPanel(tk.Frame):
             listbox.pack()
 
     def onselect(self, evt):
+        """
+        Funkcja obsługujaca wybrane z listy pomieszczenie
+        """
         children = self.container.winfo_children()
         for i in range(3, len(children)):
             children[i].destroy()
@@ -111,21 +118,33 @@ class RoomPanel(tk.Frame):
             listbox.pack()
 
     def change_mode(self):
+        """
+        Publikowanie zdarzenia zmiany stanu urządzenia
+        """
         publisher.publish(
             f'{self.name}/{self.DEVICE}/mode', self.btn_var.get())
         self.change(self.btn_var.get())
 
     def update_value(self, evt):
+        """
+        Publikowanie zdarzenia zmiany stanu urządzenia - natężenie
+        """
         w = evt.widget
         publisher.publish(f'{self.name}/{self.DEVICE}/power', w.get())
 
     def on_color_change(self, evt):
+        """
+        Publikowanie zdarzenia zmiany stanu urządzenia - kolor
+        """
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
         publisher.publish(f'{self.name}/{self.DEVICE}/color', value)
 
     def change(self, mess):
+        """
+        Ustawienie nowego stanu na przycisku
+        """
         if mess == "ON":
             self.btn_var.set("OFF")
         elif mess == "OFF":

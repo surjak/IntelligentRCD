@@ -6,7 +6,9 @@ import json
 
 
 def subscriber(func):
-
+    """
+        Funkcja subskrybująca na informacje od Brokera MQTT
+    """
     def on_connect(client, userdata, flags, rc):
         routes = []
 
